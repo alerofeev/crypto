@@ -1,0 +1,37 @@
+/* mainScene */
+.scene {
+    -fx-background-color: #e7e7e7;
+    -fx-font-size: 12px;
+}
+
+.menu-bar .context-menu {
+    -fx-min-width: 125px;
+}
+
+.choice-box .context-menu {
+    -fx-min-width: 450px;
+}
+
+.text-field {
+    -fx-border-width: 1px;
+}
+
+.error-border {
+    -fx-border-width: 1px;
+    -fx-border-color: #c23434;
+    -fx-border-radius: 3px;
+}
+
+.error-border:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-effect: dropshadow(two-pass-box, rgba(232, 17, 35, 0.25), 2.5, 1.0, 0, 0);
+}
+/* !mainScene */
+
+/* modalScene */
+.modal-text {
+    -fx-font-size: 12px;
+    -fx-padding: 5px 0;
+}
+/* !modalScene */

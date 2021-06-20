@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/16.0.0"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.kodokushi.controller.MainSceneController"
+      styleClass="scene"
+      stylesheets="/styles/main.css"
+      fx:id="mainScene">
+    <MenuBar minWidth="475">
+      <Menu text="Файл">
+        <MenuItem fx:id="menuExitButton" text="Выход" />
+      </Menu>
+      <Menu text="Справка">
+        <MenuItem fx:id="menuAboutProgramButton" text="О программе..." />
+      </Menu>
+    </MenuBar>
+  <VBox prefHeight="324.0" minWidth="471.0" spacing="10">
+    <padding>
+      <Insets bottom="10" left="10" right="10" top="10" />
+    </padding>
+    <Label text="Строка:">
+      <padding>
+        <Insets bottom="-10" />
+      </padding>
+    </Label>
+    <TextField fx:id="messageTextField" prefHeight="25.0" prefWidth="456.0" />
+    <HBox prefHeight="100.0" prefWidth="200.0">
+      <padding>
+        <Insets top="-8" />
+      </padding>
+      <RadioButton mnemonicParsing="false" selected="true" text="Текст">
+        <padding>
+          <Insets right="10" />
+        </padding>
+        <toggleGroup>
+          <ToggleGroup fx:id="selectedMode" />
+        </toggleGroup>
+      </RadioButton>
+      <RadioButton mnemonicParsing="false" text="HEX">
+        <toggleGroup>
+          <fx:reference source="selectedMode" />
+        </toggleGroup>
+      </RadioButton>
+    </HBox>
+    <Label text="Ключ (HEX):">
+      <padding>
+        <Insets bottom="-10" />
+      </padding>
+    </Label>
+    <HBox spacing="10">
+      <TextField fx:id="keyTextField" prefHeight="25.0" prefWidth="281.0" />
+      <Button fx:id="setKeyButton" mnemonicParsing="false" prefHeight="25.0" minWidth="74.0" text="Создать" />
+      <Button fx:id="copyKeyButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+    </HBox>
+    <Label text="Алгоритм шифрования:">
+      <padding>
+        <Insets bottom="-10" />
+      </padding>
+    </Label>
+    <ChoiceBox fx:id="algorithmNameChoice" prefHeight="25.0" prefWidth="455.0" value="Выберите...">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="AES" />
+          <String fx:value="XOR" />
+        </FXCollections>
+      </items>
+    </ChoiceBox>
+    <Label layoutX="20.0" layoutY="124.0" text="Результат (текст):">
+     <padding>
+      <Insets bottom="-10" />
+     </padding>
+    </Label>
+    <HBox spacing="10">
+      <TextField fx:id="resultTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
+      <Button fx:id="copyResultButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+    </HBox>
+    <Label layoutX="20.0" layoutY="176.0" text="Результат (HEX):">
+     <padding>
+      <Insets bottom="-10" />
+     </padding>
+    </Label>
+    <HBox layoutX="20.0" layoutY="193.0" spacing="10">
+      <TextField fx:id="resultHexTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
+      <Button fx:id="copyResultHexButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0"
+              text="Копировать" />
+    </HBox>
+    <HBox>
+      <Pane HBox.hgrow="ALWAYS" />
+      <Button fx:id="encryptButton" text="Зашифровать" />
+      <Pane HBox.hgrow="ALWAYS" />
+      <Button fx:id="decryptButton" text="Расшифровать" />
+      <Pane HBox.hgrow="ALWAYS" />
+    </HBox>
+  </VBox>
+</VBox>
