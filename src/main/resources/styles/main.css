@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Roboto;
+    src: url("../fonts/RobotoLight.ttf");
+}
+
 /* mainScene */
 .scene {
     -fx-background-color: #e7e7e7;

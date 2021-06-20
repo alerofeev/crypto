@@ -10,17 +10,19 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.kodokushi.controller.MainSceneController"
       styleClass="scene"
-      stylesheets="/styles/main.css"
-      fx:id="mainScene">
-    <MenuBar minWidth="475">
-      <Menu text="Файл">
-        <MenuItem fx:id="menuExitButton" text="Выход" />
-      </Menu>
-      <Menu text="Справка">
-        <MenuItem fx:id="menuAboutProgramButton" text="О программе..." />
-      </Menu>
-    </MenuBar>
-  <VBox prefHeight="324.0" minWidth="471.0" spacing="10">
+      stylesheets="@../styles/main.css"
+      fx:id="mainScene"
+      prefHeight="349.0"
+      prefWidth="475.0">
+  <MenuBar prefWidth="475">
+    <Menu text="Файл">
+      <MenuItem fx:id="menuExitButton" text="Выход" />
+    </Menu>
+    <Menu text="Справка">
+      <MenuItem fx:id="menuAboutProgramButton" text="О программе..." />
+    </Menu>
+  </MenuBar>
+  <VBox prefHeight="324.0" prefWidth="471.0" spacing="10">
     <padding>
       <Insets bottom="10" left="10" right="10" top="10" />
     </padding>
@@ -29,7 +31,8 @@
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <TextField fx:id="messageTextField" maxHeight="25.0" prefWidth="456.0" />
+    <TextField fx:id="messageTextField" maxHeight="25.0" minHeight="25.0" minWidth="300" prefHeight="25.0"
+               prefWidth="456.0" />
     <HBox prefHeight="100.0" prefWidth="200.0">
       <padding>
         <Insets top="-8" />
@@ -54,16 +57,17 @@
       </padding>
     </Label>
     <HBox spacing="10">
-      <TextField fx:id="keyTextField" maxHeight="25.0" minWidth="125.0" prefWidth="281.0" />
-      <Button fx:id="setKeyButton" mnemonicParsing="false" maxHeight="25.0" minWidth="74.0" text="Создать" />
-      <Button fx:id="copyKeyButton" mnemonicParsing="false" maxHeight="25.0" minWidth="82.0" text="Копировать" />
+      <TextField fx:id="keyTextField" maxHeight="25.0" minHeight="25.0" minWidth="125.0" prefHeight="25.0"
+                 prefWidth="281.0" />
+      <Button fx:id="setKeyButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Создать" />
+      <Button fx:id="copyKeyButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" text="Копировать" />
     </HBox>
     <Label text="Алгоритм шифрования:">
       <padding>
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <ChoiceBox fx:id="algorithmNameChoice" maxHeight="25.0" minWidth="455.0" value="Выберите...">
+    <ChoiceBox fx:id="algorithmNameChoice" prefHeight="25.0" prefWidth="455.0" value="Выберите...">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="AES" />
@@ -72,22 +76,22 @@
       </items>
     </ChoiceBox>
     <Label layoutX="20.0" layoutY="124.0" text="Результат (текст):">
-     <padding>
-      <Insets bottom="-10" />
-     </padding>
+      <padding>
+        <Insets bottom="-10" />
+      </padding>
     </Label>
     <HBox spacing="10">
-      <TextField fx:id="resultTextField" disable="true" minWidth="198.0" maxHeight="25.0" prefWidth="364.0" />
-      <Button fx:id="copyResultButton" mnemonicParsing="false" maxHeight="25.0" minWidth="82.0" text="Копировать" />
+      <TextField fx:id="resultTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
+      <Button fx:id="copyResultButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" text="Копировать" />
     </HBox>
     <Label layoutX="20.0" layoutY="176.0" text="Результат (HEX):">
-     <padding>
-      <Insets bottom="-10" />
-     </padding>
+      <padding>
+        <Insets bottom="-10" />
+      </padding>
     </Label>
     <HBox layoutX="20.0" layoutY="193.0" spacing="10">
-      <TextField fx:id="resultHexTextField" disable="true" minWidth="198.0" maxHeight="25.0" prefWidth="364.0" />
-      <Button fx:id="copyResultHexButton" mnemonicParsing="false" maxHeight="25.0" minWidth="82.0"
+      <TextField fx:id="resultHexTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
+      <Button fx:id="copyResultHexButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0"
               text="Копировать" />
     </HBox>
     <HBox>
