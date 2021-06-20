@@ -11,9 +11,7 @@
       fx:controller="com.kodokushi.controller.MainSceneController"
       styleClass="scene"
       stylesheets="@../styles/main.css"
-      fx:id="mainScene"
-      prefHeight="349.0"
-      prefWidth="475.0">
+      fx:id="mainScene">
   <MenuBar prefWidth="475">
     <Menu text="Файл">
       <MenuItem fx:id="menuExitButton" text="Выход" />
@@ -22,7 +20,7 @@
       <MenuItem fx:id="menuAboutProgramButton" text="О программе..." />
     </Menu>
   </MenuBar>
-  <VBox prefHeight="324.0" prefWidth="471.0" spacing="10">
+  <VBox prefWidth="471.0" spacing="10">
     <padding>
       <Insets bottom="10" left="10" right="10" top="10" />
     </padding>
@@ -33,7 +31,7 @@
     </Label>
     <TextField fx:id="messageTextField" maxHeight="25.0" minHeight="25.0" minWidth="300" prefHeight="25.0"
                prefWidth="456.0" />
-    <HBox prefHeight="100.0" prefWidth="200.0">
+    <HBox maxHeight="100.0" prefWidth="200.0">
       <padding>
         <Insets top="-8" />
       </padding>
