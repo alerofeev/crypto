@@ -29,7 +29,7 @@
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <TextField fx:id="messageTextField" prefHeight="25.0" prefWidth="456.0" />
+    <TextField fx:id="messageTextField" maxHeight="25.0" prefWidth="456.0" />
     <HBox prefHeight="100.0" prefWidth="200.0">
       <padding>
         <Insets top="-8" />
@@ -54,16 +54,16 @@
       </padding>
     </Label>
     <HBox spacing="10">
-      <TextField fx:id="keyTextField" prefHeight="25.0" prefWidth="281.0" />
-      <Button fx:id="setKeyButton" mnemonicParsing="false" prefHeight="25.0" minWidth="74.0" text="Создать" />
-      <Button fx:id="copyKeyButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+      <TextField fx:id="keyTextField" maxHeight="25.0" minWidth="125.0" prefWidth="281.0" />
+      <Button fx:id="setKeyButton" mnemonicParsing="false" maxHeight="25.0" minWidth="74.0" text="Создать" />
+      <Button fx:id="copyKeyButton" mnemonicParsing="false" maxHeight="25.0" minWidth="82.0" text="Копировать" />
     </HBox>
     <Label text="Алгоритм шифрования:">
       <padding>
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <ChoiceBox fx:id="algorithmNameChoice" prefHeight="25.0" prefWidth="455.0" value="Выберите...">
+    <ChoiceBox fx:id="algorithmNameChoice" maxHeight="25.0" minWidth="455.0" value="Выберите...">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="AES" />
@@ -77,8 +77,8 @@
      </padding>
     </Label>
     <HBox spacing="10">
-      <TextField fx:id="resultTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
-      <Button fx:id="copyResultButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+      <TextField fx:id="resultTextField" disable="true" minWidth="198.0" maxHeight="25.0" prefWidth="364.0" />
+      <Button fx:id="copyResultButton" mnemonicParsing="false" maxHeight="25.0" minWidth="82.0" text="Копировать" />
     </HBox>
     <Label layoutX="20.0" layoutY="176.0" text="Результат (HEX):">
      <padding>
@@ -86,8 +86,8 @@
      </padding>
     </Label>
     <HBox layoutX="20.0" layoutY="193.0" spacing="10">
-      <TextField fx:id="resultHexTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
-      <Button fx:id="copyResultHexButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0"
+      <TextField fx:id="resultHexTextField" disable="true" minWidth="198.0" maxHeight="25.0" prefWidth="364.0" />
+      <Button fx:id="copyResultHexButton" mnemonicParsing="false" maxHeight="25.0" minWidth="82.0"
               text="Копировать" />
     </HBox>
     <HBox>
