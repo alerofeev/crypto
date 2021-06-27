@@ -64,7 +64,7 @@
     <ChoiceBox fx:id="algorithmNameChoice" prefHeight="25.0" maxWidth="500.0" value="Выберите...">
       <items>
         <FXCollections fx:factory="observableArrayList">
-          <String fx:value="AES" />
+          <String fx:value="AES-128 ECB" />
           <String fx:value="XOR" />
         </FXCollections>
       </items>

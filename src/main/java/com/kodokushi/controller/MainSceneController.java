@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
 
 public class MainSceneController {
 
@@ -98,36 +97,13 @@ public class MainSceneController {
         }
     }
 
-    private char[] mFillMessage(String textType, String algorithm) {
-        if (textType.equals("HEX")) {
-            if (algorithm.equals("AES")) {
-                return Crypto.mPadMessage(Converter.mHexStringToCharArray(messageTextField.getText()));
-            } else {
-                return Converter.mHexStringToCharArray(messageTextField.getText());
-            }
-        } else {
-            if (algorithm.equals("AES")) {
-                return Crypto.mPadMessage(Converter.mStringToCharArray(messageTextField.getText()));
-            } else {
-                return Converter.mStringToCharArray(messageTextField.getText());
-            }
-        }
-    }
-
     private void mEncryptDecryptAuxiliary(String mode) {
         boolean messageFieldStatus = mValidateMessageTextField();
         boolean keyFieldStatus = mValidateKeyTextField();
         boolean algorithmNameStatus = mValidateAlgorithmNameField();
         if (messageFieldStatus && keyFieldStatus && algorithmNameStatus) {
-            Crypto crypto = new Crypto(algorithmNameChoice.getValue());
-            char[] key = Converter.mHexStringToCharArray(keyTextField.getText());
-            char[] message = mFillMessage(mGetToggleGroupValue(), algorithmNameChoice.getValue());
-            switch (mode) {
-                case "enc" -> crypto.mEncrypt(message, key);
-                case "dec" -> crypto.mDecrypt(message, key);
-            }
-            resultTextField.setText(Converter.mCharArrayToString(message));
-            resultHexTextField.setText(Converter.mCharArrayToHexString(message));
+            // resultTextField.setText(Converter.mCharArrayToString());
+            // resultHexTextField.setText(Converter.mCharArrayToHexString());
         } else {
             ErrorSceneController.mDisplayErrorWindow();
         }
@@ -163,7 +139,7 @@ public class MainSceneController {
             }
         });
 
-        setKeyButton.setOnAction(event -> keyTextField.setText(Converter.mCharArrayToHexString(Crypto.mSetKey())));
+        setKeyButton.setOnAction(event -> keyTextField.setText("")); // TODO: add converted to hex byte array
 
         copyKeyButton.setOnAction(event -> mCopyToClipboard(keyTextField.getText()));
 
@@ -171,8 +147,8 @@ public class MainSceneController {
 
         copyResultHexButton.setOnAction(event -> mCopyToClipboard(resultHexTextField.getText()));
 
-        encryptButton.setOnAction(event -> mEncryptDecryptAuxiliary("enc"));
+        encryptButton.setOnAction(event -> {});
 
-        decryptButton.setOnAction(event -> mEncryptDecryptAuxiliary("dec"));
+        decryptButton.setOnAction(event -> {});
     }
 }

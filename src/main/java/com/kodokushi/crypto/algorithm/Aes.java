@@ -1,5 +1,7 @@
 package com.kodokushi.crypto.algorithm;
 
+import java.util.ArrayList;
+
 public interface Aes {
 
      char[] S_BOX = {
@@ -59,10 +61,12 @@ public interface Aes {
             0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d
     };
 
-    static void mEncrypt(char[] message, char[] key, int startPosition) {
-        char[] state = new char[16];
-        System.arraycopy(message, startPosition, state, 0, 16);
-        char[] expandedKey = new char[176];
+    static void mEncrypt(ArrayList<Byte> message, byte[] key, int startPosition) {
+        byte[] state = new byte[16];
+        for (int i = 0, j = startPosition; i < 16; i++, j++) {
+            state[i] = message.get(j);
+        }
+        byte[] expandedKey = new byte[176];
         mKeyExpansion(key, expandedKey);
         mAddRoundKey(state, expandedKey, 0);
         for (int i = 1; i < 10; i++) {
@@ -74,13 +78,17 @@ public interface Aes {
         mSubBytes(state);
         mShiftRows(state);
         mAddRoundKey(state, expandedKey, 160);
-        System.arraycopy(state, 0, message, startPosition, 16);
+        for (int i = 0, j = startPosition; i < 16; i++, j++) {
+            message.set(j, state[i]);
+        }
     }
 
-    static void mDecrypt(char[] message, char[] key, int startPosition) {
-        char[] state = new char[16];
-        System.arraycopy(message, startPosition, state, 0, 16);
-        char[] expandedKey = new char[176];
+    static void mDecrypt(ArrayList<Byte> message, byte[] key, int startPosition) {
+        byte[] state = new byte[16];
+        for (int i = 0, j = startPosition; i < 16; i++, j++) {
+            state[i] = message.get(j);
+        }
+        byte[] expandedKey = new byte[176];
         mKeyExpansion(key, expandedKey);
         mAddRoundKey(state, expandedKey, 160);
         for (int i = 9; i > 0; i--) {
@@ -92,56 +100,54 @@ public interface Aes {
         mInvertShiftRows(state);
         mInvertSubBytes(state);
         mAddRoundKey(state, expandedKey, 0);
-        System.arraycopy(state, 0, message, startPosition, 16);
+        for (int i = 0, j = startPosition; i < 16; i++, j++) {
+            message.set(j, state[i]);
+        }
     }
 
-    private static void mKeyExpansionCore(char[] input, int iterator) {
+    private static void mKeyExpansionCore(byte[] input, int iterator) {
         mRotateWord(input);
         for (int i = 0; i < 4; i++) {
-            input[i] = S_BOX[input[i]];
+            input[i] = (byte) S_BOX[input[i]];
         }
         input[0] ^= RCON[iterator];
     }
 
-    private static void mKeyExpansion(char[] inputKey, char[] expandedKey) {
+    private static void mKeyExpansion(byte[] inputKey, byte[] expandedKey) {
         System.arraycopy(inputKey, 0, expandedKey, 0, 16);
         int bytesGenerated = 16, rConIterations = 1;
-        char[] temp = new char[4];
+        byte[] temp = new byte[4];
         while (bytesGenerated < 176) {
             System.arraycopy(expandedKey, bytesGenerated - 4, temp, 0, 4);
             if (bytesGenerated % 16 == 0) {
                 mKeyExpansionCore(temp, rConIterations++);
             }
             for (char i = 0; i < 4; i++) {
-                expandedKey[bytesGenerated] = (char) (expandedKey[bytesGenerated - 16] ^ temp[i]);
+                expandedKey[bytesGenerated] = (byte) (expandedKey[bytesGenerated - 16] ^ temp[i]);
                 bytesGenerated++;
             }
         }
     }
 
-    private static void mAddRoundKey(char[] state, char[] roundKey, int startPosition) {
+    private static void mAddRoundKey(byte[] state, byte[] roundKey, int startPosition) {
         for (int i = 0; i < 16; i++, startPosition++)
             state[i] ^= roundKey[startPosition];
     }
 
-    private static void mSubBytes(char[] state) {
+    private static void mSubBytes(byte[] state) {
         for (int i = 0; i < 16; i++) {
-            if (state[i] < 256) {
-                state[i] = S_BOX[state[i]];
-            }
+            state[i] = (byte) S_BOX[state[i]];
         }
     }
 
-    private static void mInvertSubBytes(char[] state) {
+    private static void mInvertSubBytes(byte[] state) {
         for (int i = 0; i < 16; i++) {
-            if (state[i] < 256) {
-                state[i] = INVERTED_S_BOX[state[i]];
-            }
+            state[i] = (byte) INVERTED_S_BOX[state[i]];
         }
     }
 
-    private static void mShiftRows(char[] state) {
-        char[] temp = new char[16];
+    private static void mShiftRows(byte[] state) {
+        byte[] temp = new byte[16];
         for (int i = 0, j = 0; i < 16; i++, j += 5) {
             if (j > 16) {
                 j = Math.abs(j - 16);
@@ -151,8 +157,8 @@ public interface Aes {
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    private static void mInvertShiftRows(char[] state) {
-        char[] temp = new char[16];
+    private static void mInvertShiftRows(byte[] state) {
+        byte[] temp = new byte[16];
         for (int i = 0, j = 0; i < 16; i++, j -= 3) {
             if (j < 0) {
                 j = 16 + j;
@@ -162,14 +168,14 @@ public interface Aes {
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    private static char mMultiplyBytes(char a, char b) {
-        char result = 0;
+    private static byte mMultiplyBytes(byte a, byte b) {
+        byte result = 0;
         for (int i = 0; i < 8; i++) {
             if ((b & 1) != 0) {
                 result ^= a;
             }
             if ((a & 0x80) != 0) {
-                a = (char) ((a << 1) ^ 0x11B);
+                a = (byte) ((a << 1) ^ 0x11B);
             } else {
                 a <<= 1;
             }
@@ -178,38 +184,38 @@ public interface Aes {
         return result;
     }
 
-    private static void mMixColumns(char[] state) {
-        char[] temp = new char[16];
+    private static void mMixColumns(byte[] state) {
+        byte[] temp = new byte[16];
         for (int i = 0; i < 16; i += 4) {
-            temp[i] = (char) (mMultiplyBytes((char) 0x02, state[i]) ^ mMultiplyBytes((char) 0x03, state[i + 1]) ^
+            temp[i] = (byte) (mMultiplyBytes((byte) 0x02, state[i]) ^ mMultiplyBytes((byte) 0x03, state[i + 1]) ^
                     state[i + 2] ^ state[i + 3]);
-            temp[i + 1] = (char) (state[i] ^ mMultiplyBytes((char) 0x02, state[i + 1]) ^
-                    mMultiplyBytes((char) 0x03, state[i + 2]) ^ state[i + 3]);
-            temp[i + 2] = (char) (state[i] ^ state[i + 1] ^ mMultiplyBytes((char) 0x02, state[i + 2]) ^
-                    mMultiplyBytes((char) 0x03, state[i + 3]));
-            temp[i + 3] = (char) (mMultiplyBytes((char) 0x03, state[i]) ^ state[i + 1] ^ state[i + 2] ^
-                    mMultiplyBytes((char) 0x02, state[i + 3]));
+            temp[i + 1] = (byte) (state[i] ^ mMultiplyBytes((byte) 0x02, state[i + 1]) ^
+                    mMultiplyBytes((byte) 0x03, state[i + 2]) ^ state[i + 3]);
+            temp[i + 2] = (byte) (state[i] ^ state[i + 1] ^ mMultiplyBytes((byte) 0x02, state[i + 2]) ^
+                    mMultiplyBytes((byte) 0x03, state[i + 3]));
+            temp[i + 3] = (byte) (mMultiplyBytes((byte) 0x03, state[i]) ^ state[i + 1] ^ state[i + 2] ^
+                    mMultiplyBytes((byte) 0x02, state[i + 3]));
         }
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    private static void mInvertMixColumns(char[] state) {
-        char[] temp = new char[16];
+    private static void mInvertMixColumns(byte[] state) {
+        byte[] temp = new byte[16];
         for (int i = 0; i < 16; i += 4) {
-            temp[i] = (char) (mMultiplyBytes((char) 0xE, state[i]) ^ mMultiplyBytes((char) 0xB, state[i + 1]) ^
-                    mMultiplyBytes((char) 0xD, state[i + 2]) ^ mMultiplyBytes((char) 0x09, state[i + 3]));
-            temp[i + 1] = (char) (mMultiplyBytes((char) 0x09, state[i]) ^ mMultiplyBytes((char) 0xE, state[i + 1]) ^
-                    mMultiplyBytes((char) 0xB, state[i + 2]) ^ mMultiplyBytes((char) 0xD, state[i + 3]));
-            temp[i + 2] = (char) (mMultiplyBytes((char) 0xD, state[i]) ^ mMultiplyBytes((char) 0x09, state[i + 1]) ^
-                    mMultiplyBytes((char) 0xE, state[i + 2]) ^ mMultiplyBytes((char) 0xB, state[i + 3]));
-            temp[i + 3] = (char) (mMultiplyBytes((char) 0xB, state[i]) ^ mMultiplyBytes((char) 0xD, state[i + 1]) ^
-                    mMultiplyBytes((char) 0x09, state[i + 2]) ^ mMultiplyBytes((char) 0xE, state[i + 3]));
+            temp[i] = (byte) (mMultiplyBytes((byte) 0xE, state[i]) ^ mMultiplyBytes((byte) 0xB, state[i + 1]) ^
+                    mMultiplyBytes((byte) 0xD, state[i + 2]) ^ mMultiplyBytes((byte) 0x09, state[i + 3]));
+            temp[i + 1] = (byte) (mMultiplyBytes((byte) 0x09, state[i]) ^ mMultiplyBytes((byte) 0xE, state[i + 1]) ^
+                    mMultiplyBytes((byte) 0xB, state[i + 2]) ^ mMultiplyBytes((byte) 0xD, state[i + 3]));
+            temp[i + 2] = (byte) (mMultiplyBytes((byte) 0xD, state[i]) ^ mMultiplyBytes((byte) 0x09, state[i + 1]) ^
+                    mMultiplyBytes((byte) 0xE, state[i + 2]) ^ mMultiplyBytes((byte) 0xB, state[i + 3]));
+            temp[i + 3] = (byte) (mMultiplyBytes((byte) 0xB, state[i]) ^ mMultiplyBytes((byte) 0xD, state[i + 1]) ^
+                    mMultiplyBytes((byte) 0x09, state[i + 2]) ^ mMultiplyBytes((byte) 0xE, state[i + 3]));
         }
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    private static void mRotateWord(char[] input) {
-        char temp = input[0];
+    private static void mRotateWord(byte[] input) {
+        byte temp = input[0];
         for (int i = 0, j = 1; j < 4; i++, j++) {
             input[i] = input[j];
         }
