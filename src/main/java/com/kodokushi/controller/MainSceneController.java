@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -23,7 +22,7 @@ public class MainSceneController {
     @FXML
     private MenuItem menuExitButton;
     @FXML
-    private MenuItem menuAboutProgramButton;
+    private MenuItem menuManualButton;
     @FXML
     private TextField messageTextField;
     @FXML
@@ -49,28 +48,16 @@ public class MainSceneController {
     @FXML
     private Button decryptButton;
 
-    /**
-     * Получает значение элемента контроля RadioButton
-     * @return string
-     */
     private String mGetToggleGroupValue() {
         return ((RadioButton) selectedMode.getSelectedToggle()).getText();
     }
 
-    /**
-     * Копирует строку в буфер обмена
-     * @param string строка
-     */
     private void mCopyToClipboard(String string) {
         StringSelection stringSelection = new StringSelection(string);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
     }
 
-    /**
-     * Проверяет правильность введеных в элемент контроля messageTextField значений
-     * @return boolean
-     */
     private boolean mValidateMessageTextField() {
         if (mGetToggleGroupValue().equals("HEX")) {
             if (!messageTextField.getText().matches("(?=.*[\\d])(?=.*[\\s])(?=.*[a-fA-F])[a-fA-F\\s\\d]+")) {
@@ -91,10 +78,6 @@ public class MainSceneController {
         }
     }
 
-    /**
-     * Проверяет правильность введеных в элемент контроля keyTextField значений
-     * @return boolean
-     */
     private boolean mValidateKeyTextField() {
         if (!keyTextField.getText().matches("(?=.*[\\d])(?=.*[\\s])(?=.*[a-fA-F])[a-fA-F\\s\\d]{1,48}")) {
             keyTextField.getStyleClass().add("error-border");
@@ -105,10 +88,6 @@ public class MainSceneController {
         }
     }
 
-    /**
-     * Проверяет правильность выбранных в элементе контроля algorithmNameChoiceBox значений
-     * @return boolean
-     */
     private boolean mValidateAlgorithmNameField() {
         if (!algorithmNameChoice.getValue().equals("AES") && !algorithmNameChoice.getValue().equals("XOR")) {
             algorithmNameChoice.getStyleClass().add("error-border");
@@ -119,31 +98,6 @@ public class MainSceneController {
         }
     }
 
-    /**
-     * Заполняет лист строками, содержащими служебные сообщения
-     * @return ArrayList<String>
-     */
-    private ArrayList<String> mFillErrorMessagesArray(boolean messageFieldStatus, boolean keyFieldStatus,
-                                                      boolean algorithmNameStatus) {
-        ArrayList<String> messages = new ArrayList<>();
-        if (!messageFieldStatus) {
-            messages.add("Проверьте правильность заполнения поля \"Строка\"");
-        }
-        if (!keyFieldStatus) {
-            messages.add("Проверьте правильность заполнения поля \"Ключ\"");
-        }
-        if (!algorithmNameStatus) {
-            messages.add("Выберите алгоритм");
-        }
-        return messages;
-    }
-
-    /**
-     * Формирует сообщение в соответствии с типом текста и выбранным алгоритмом шифрования
-     * @param textType тип текста
-     * @param algorithm выбранный алгоритм шифрования
-     * @return char[]
-     */
     private char[] mFillMessage(String textType, String algorithm) {
         if (textType.equals("HEX")) {
             if (algorithm.equals("AES")) {
@@ -160,10 +114,6 @@ public class MainSceneController {
         }
     }
 
-    /**
-     * Выполняет операцию в соответствии с выбранным режимом
-     * @param mode режим (шифрование или дешифровка)
-     */
     private void mEncryptDecryptAuxiliary(String mode) {
         boolean messageFieldStatus = mValidateMessageTextField();
         boolean keyFieldStatus = mValidateKeyTextField();
@@ -179,17 +129,13 @@ public class MainSceneController {
             resultTextField.setText(Converter.mCharArrayToString(message));
             resultHexTextField.setText(Converter.mCharArrayToHexString(message));
         } else {
-            // TODO: Add modal window
+            ErrorSceneController.mDisplayErrorWindow();
         }
     }
 
-    /**
-     * Выполняет инициализацию элементов контроля
-     */
     @FXML
     private void initialize() {
         Platform.runLater(() -> mainScene.requestFocus());
-
         mainScene.setOnMouseClicked(event -> mainScene.requestFocus());
 
         menuExitButton.setOnAction(event -> {
@@ -197,9 +143,7 @@ public class MainSceneController {
             System.exit(0);
         });
 
-        menuAboutProgramButton.setOnAction(event -> {
-                // TODO: Add modal window
-        });
+        menuManualButton.setOnAction(event -> ManualSceneController.mDisplayManualWindow());
 
         messageTextField.focusedProperty().addListener((arg0, oldValue, newValue) -> {
             if (!newValue) {

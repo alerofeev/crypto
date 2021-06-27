@@ -10,11 +10,6 @@ public record Crypto(String algorithmName) implements Xor, Aes {
 
     private static final int KEY_LENGTH = 16;
 
-    /**
-     * Шифрует сообщение с помощью указанного алгоритма
-     * @param message сообщение
-     * @param key ключ
-     */
     public void mEncrypt(char[] message, char[] key) {
         switch (this.algorithmName) {
             case "AES" -> {
@@ -26,11 +21,6 @@ public record Crypto(String algorithmName) implements Xor, Aes {
         }
     }
 
-    /**
-     * Дешифрует сообщение с помощью указанного алгоритма
-     * @param message сообщение
-     * @param key ключ
-     */
     public void mDecrypt(char[] message, char[] key) {
         switch (this.algorithmName) {
             case "AES" -> {
@@ -59,10 +49,6 @@ public record Crypto(String algorithmName) implements Xor, Aes {
     }
 */
 
-    /**
-     * Генерирует криптографически не безопасные значения для ключа
-     * @return char[]
-     */
     public static char[] mSetKey() {
         Random random = new Random();
         char[] key = new char[KEY_LENGTH];
@@ -72,11 +58,6 @@ public record Crypto(String algorithmName) implements Xor, Aes {
         return key;
     }
 
-    /**
-     * Заполняет message {0x00} до длины, кратной 16
-     * @param message сообщение
-     * @return String
-     */
     public static char[] mPadMessage(char[] message) {
         if (message.length % 16 != 0) {
             char[] paddedMessage = new char[16 * (message.length / 16 + 1)];

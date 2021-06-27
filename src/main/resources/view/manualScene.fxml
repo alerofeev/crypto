@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.kodokushi.controller.ManualSceneController" stylesheets="@../styles/main.css" id="scene"
+      fx:id="mainScene" prefHeight="300.0" prefWidth="350.0" spacing="10.0">
+  <padding>
+    <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
+  </padding>
+  <VBox spacing="5.0" alignment="CENTER">
+    <Label text="crypto, версия 1.0.0" />
+    <Label text="©k0dokushi, 2021" />
+    <HBox>
+      <padding>
+        <Insets top="5.0" />
+      </padding>
+      <Text text="Как использовать:" styleClass="h3" />
+      <Pane HBox.hgrow="ALWAYS" />
+    </HBox>
+    <ScrollPane prefHeight="200.0" prefWidth="200.0">
+      <padding>
+        <Insets top="5.0" right="5.0" bottom="5.0" left="5.0" />
+      </padding>
+      <Text text="А никак." wrappingWidth="312.0"/>
+    </ScrollPane>
+  </VBox>
+  <HBox>
+    <Pane HBox.hgrow="ALWAYS" />
+    <Button fx:id="closeButton" minWidth="74.0" mnemonicParsing="false" prefHeight="25.0" text="OK" />
+  </HBox>
+</VBox>

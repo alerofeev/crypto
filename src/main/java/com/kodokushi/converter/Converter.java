@@ -4,11 +4,6 @@ import java.util.ArrayList;
 
 public interface Converter {
 
-    /**
-     * Перезаписывает массив символов в строку
-     * @param charArray массив символов
-     * @return String
-     */
     static String mCharArrayToString(char[] charArray) {
         StringBuilder stringBuilder = new StringBuilder();
         for (char c : charArray) {
@@ -17,11 +12,6 @@ public interface Converter {
         return stringBuilder.toString();
     }
 
-    /**
-     * Перезаписывает строку в массив символов
-     * @param string строка
-     * @return char[]
-     */
     static char[] mStringToCharArray(String string) {
         char[] charArray = new char[string.length()];
         for (int i = 0; i < string.length(); i++) {
@@ -30,11 +20,6 @@ public interface Converter {
         return charArray;
     }
 
-    /**
-     * Конвертирует массив символов в строку с символами в шестнадцатиричном представлении
-     * @param charArray массив символов
-     * @return String
-     */
     static String mCharArrayToHexString(char[] charArray) {
         StringBuilder hexString = new StringBuilder();
         for (int c : charArray) {
@@ -43,11 +28,6 @@ public interface Converter {
         return hexString.toString();
     }
 
-    /**
-     * Конвертирует строку с символами в шестнадцатиричном представлении в массив символов
-     * @param hexString строка
-     * @return char[]
-     */
     static char[] mHexStringToCharArray(String hexString) {
         ArrayList<Character> tempCharArray = new ArrayList<>();
         StringBuilder tempHex = new StringBuilder("");

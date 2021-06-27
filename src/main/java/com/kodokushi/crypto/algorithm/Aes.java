@@ -59,12 +59,6 @@ public interface Aes {
             0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 0x74, 0xe8, 0xcb, 0x8d
     };
 
-    /**
-     * Шифрует сообщения через алгоритм AES-128-ECB
-     * @param message сообщение
-     * @param key ключ
-     * @param startPosition начальная позиция для копирования блока message
-     */
     static void mEncrypt(char[] message, char[] key, int startPosition) {
         char[] state = new char[16];
         System.arraycopy(message, startPosition, state, 0, 16);
@@ -83,12 +77,6 @@ public interface Aes {
         System.arraycopy(state, 0, message, startPosition, 16);
     }
 
-    /**
-     * Дешифрует сообщения через алгоритм AES-128-ECB
-     * @param message сообщение
-     * @param key ключ
-     * @param startPosition начальная позиция для копирования блока message
-     */
     static void mDecrypt(char[] message, char[] key, int startPosition) {
         char[] state = new char[16];
         System.arraycopy(message, startPosition, state, 0, 16);
@@ -107,12 +95,6 @@ public interface Aes {
         System.arraycopy(state, 0, message, startPosition, 16);
     }
 
-    /**
-     * Производит замену байтов в input, используя таблицу замен S-box
-     * Производит операцию XOR для нулевого элемента input c элементом таблицы RCON с индексом iterator
-     * @param input массив симолов
-     * @param iterator итератор
-     */
     private static void mKeyExpansionCore(char[] input, int iterator) {
         mRotateWord(input);
         for (int i = 0; i < 4; i++) {
@@ -121,11 +103,6 @@ public interface Aes {
         input[0] ^= RCON[iterator];
     }
 
-    /**
-     * Формирует расширенный ключ - набор раундовых ключей
-     * @param inputKey ключ
-     * @param expandedKey расширенный ключ
-     */
     private static void mKeyExpansion(char[] inputKey, char[] expandedKey) {
         System.arraycopy(inputKey, 0, expandedKey, 0, 16);
         int bytesGenerated = 16, rConIterations = 1;
@@ -142,21 +119,11 @@ public interface Aes {
         }
     }
 
-    /**
-     * Производит операцию XOR для каждого байта state для каждого байта roundKey
-     * @param state массив состояния
-     * @param roundKey раундовый ключ
-     * @param startPosition начальная позиция для работы с раундовым ключом
-     */
     private static void mAddRoundKey(char[] state, char[] roundKey, int startPosition) {
         for (int i = 0; i < 16; i++, startPosition++)
             state[i] ^= roundKey[startPosition];
     }
 
-    /**
-     * Обрабатывает каждый байт state, производя нелинейную замену байтов, используя таблицу замен S-box
-     * @param state массив состояния
-     */
     private static void mSubBytes(char[] state) {
         for (int i = 0; i < 16; i++) {
             if (state[i] < 256) {
@@ -165,10 +132,6 @@ public interface Aes {
         }
     }
 
-    /**
-     * Обрабатывает каждый байт state, производя нелинейную замену байтов, используя инвертированную таблицу замен S-box
-     * @param state массив состояния
-     */
     private static void mInvertSubBytes(char[] state) {
         for (int i = 0; i < 16; i++) {
             if (state[i] < 256) {
@@ -177,10 +140,6 @@ public interface Aes {
         }
     }
 
-    /**
-     * Производит циклический сдвиг на n байт по горизонтали в зависимости от индекса state
-     * @param state массив состояния
-     */
     private static void mShiftRows(char[] state) {
         char[] temp = new char[16];
         for (int i = 0, j = 0; i < 16; i++, j += 5) {
@@ -192,10 +151,6 @@ public interface Aes {
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    /**
-     * Производит циклический сдвиг на n байт по горизонтали в зависимости от индекса state
-     * @param state массив состояния
-     */
     private static void mInvertShiftRows(char[] state) {
         char[] temp = new char[16];
         for (int i = 0, j = 0; i < 16; i++, j -= 3) {
@@ -207,12 +162,6 @@ public interface Aes {
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    /**
-     * Перемножает байты с применением правил умножения в поле Гало
-     * @param a первый множитель
-     * @param b второй множитель
-     * @return произведение a и b
-     */
     private static char mMultiplyBytes(char a, char b) {
         char result = 0;
         for (int i = 0; i < 8; i++) {
@@ -229,11 +178,6 @@ public interface Aes {
         return result;
     }
 
-    /**
-     * Обрабатывает state по колонкам, трактуя каждую из них как полином третьей степени, производя умножение в поле Гало
-     * по модулю x^4 + 1 на фиксированный многочлен 3x^2 + x^2 + x + 2
-     * @param state массив состояния
-     */
     private static void mMixColumns(char[] state) {
         char[] temp = new char[16];
         for (int i = 0; i < 16; i += 4) {
@@ -249,11 +193,6 @@ public interface Aes {
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    /**
-     * Обрабатывает state по колонкам, трактуя каждую из них как полином третьей степени, производя умножение в поле Гало
-     * по модулю x^4 + 1 на фиксированный многочлен {0b}x^3 + {0d}x^2 + {09}x + {0e}
-     * @param state массив состояния
-     */
     private static void mInvertMixColumns(char[] state) {
         char[] temp = new char[16];
         for (int i = 0; i < 16; i += 4) {
@@ -269,10 +208,6 @@ public interface Aes {
         System.arraycopy(temp, 0, state, 0, 16);
     }
 
-    /**
-     * Производит циклическую перестановку над 4-байтовым словом
-     * @param input массив символов, содержащий 4-байтовое слово
-     */
     private static void mRotateWord(char[] input) {
         char temp = input[0];
         for (int i = 0, j = 1; j < 4; i++, j++) {
