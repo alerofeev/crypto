@@ -11,17 +11,24 @@ public record Crypto(String algorithm, String mode, ArrayList<Byte> message, byt
 
     private static final int KEY_LENGTH = 16;
 
-    public static final String AES_128_ECB = "aes128ecb";
-    public static final String GOST = "gost";
-    public static final String XOR = "xor";
-
     public void mTransform() {
-        switch (algorithm) {
-            case AES_128_ECB -> {
-                // TODO: add AES encrypt-decrypt
+        switch (this.algorithm) {
+            case "AES-128 ECB" -> {
+                if (this.message.size() % 16 != 0) {
+                    mPadMessage();
+                }
+                if (mode.equals("enc")) {
+                    for (int i = 0; i < this.message.size(); i += 16) {
+                        Aes.mEncrypt(message, key, i);
+                    }
+                } else {
+                    for (int i = 0; i < this.message.size(); i += 16) {
+                        Aes.mDecrypt(message, key, i);
+                    }
+                }
             }
-            case GOST -> { }
-            case XOR -> Xor.mEncryptDecrypt(message, key);
+            case "GOST" -> { }
+            case "XOR" -> Xor.mEncryptDecrypt(this.message, this.key);
         }
     }
 

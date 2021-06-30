@@ -98,10 +98,8 @@ public class MainSceneController {
     }
 
     private void mEncryptDecryptAuxiliary(String mode) {
-        boolean messageFieldStatus = mValidateMessageTextField();
-        boolean keyFieldStatus = mValidateKeyTextField();
-        boolean algorithmNameStatus = mValidateAlgorithmNameField();
-        if (messageFieldStatus && keyFieldStatus && algorithmNameStatus) {
+        if (mValidateMessageTextField() && mValidateKeyTextField() && mValidateAlgorithmNameField()) {
+
             // resultTextField.setText(Converter.mCharArrayToString());
             // resultHexTextField.setText(Converter.mCharArrayToHexString());
         } else {
