@@ -14,8 +14,21 @@
     -fx-min-width: 125px;
 }
 
-.choice-box .context-menu {
-    -fx-min-width: 450px;
+.algorithm-chooser .context-menu {
+    -fx-min-width: 453px;
+}
+
+.key-size-chooser .context-menu {
+    -fx-min-width: 55px;
+}
+
+.key-size-chooser .menu-item {
+    -fx-min-width: 50px;
+    -fx-padding: 5px 0;
+}
+
+.choice-box:disabled .label {
+    -fx-text-fill: #2f2f2f;
 }
 
 .text-field {

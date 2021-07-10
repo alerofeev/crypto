@@ -6,16 +6,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/16.0.0" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.kodokushi.controller.MainSceneController" styleClass="scene" stylesheets="@../styles/main.css"
-      fx:id="mainScene">
+<VBox fx:id="mainScene" styleClass="scene" stylesheets="@../styles/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kodokushi.controller.MainSceneController">
   <MenuBar minWidth="475.0">
     <Menu text="Файл">
       <!--<MenuItem fx:id="menuSettingsButton" text="Настройки" />-->
       <MenuItem fx:id="menuExitButton" text="Выход" />
     </Menu>
     <Menu text="Справка">
-      <MenuItem fx:id="menuManualButton" text="О программе..."/>
+      <MenuItem fx:id="menuManualButton" text="О программе..." />
     </Menu>
   </MenuBar>
   <VBox minWidth="471.0" spacing="10">
@@ -27,7 +25,7 @@
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <TextField fx:id="messageTextField" prefHeight="25.0" prefWidth="456.0" />
+    <TextField fx:id="messageTextField" prefHeight="25.0" />
     <HBox prefWidth="200.0">
       <padding>
         <Insets top="-8" />
@@ -46,46 +44,61 @@
         </toggleGroup>
       </RadioButton>
     </HBox>
+    <Label text="Алгоритм шифрования:">
+      <padding>
+        <Insets bottom="-10" left="1" />
+      </padding>
+    </Label>
+    <ChoiceBox fx:id="algorithmChooser" maxWidth="600.0" prefHeight="25.0" styleClass="algorithm-chooser" value="Выберите...">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="AES ECB" />
+          <String fx:value="GOST" />
+        </FXCollections>
+      </items>
+    </ChoiceBox>
     <Label text="Ключ (HEX):">
       <padding>
         <Insets bottom="-10" />
       </padding>
     </Label>
     <HBox spacing="10">
-      <TextField fx:id="keyTextField" prefHeight="25.0" prefWidth="281.0" />
-      <Button fx:id="setKeyButton" mnemonicParsing="false" prefHeight="25.0" minWidth="74.0" text="Создать" />
-      <Button fx:id="copyKeyButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+      <VBox minWidth="271.0">
+        <TextField fx:id="keyTextField" prefHeight="25.0" />
+      </VBox>
+      <ChoiceBox fx:id="keySizeChooser" disable="true" prefHeight="25.0" prefWidth="57.0" styleClass="key-size-chooser" value="...">
+        <items>
+          <FXCollections fx:factory="observableArrayList">
+            <String fx:value="128" />
+            <String fx:value="192" />
+            <String fx:value="256" />
+          </FXCollections>
+        </items>
+      </ChoiceBox>
+      <Button fx:id="setKeyButton" minWidth="74.0" mnemonicParsing="false" prefHeight="25.0" text="Создать" />
+      <Button fx:id="copyKeyButton" minWidth="82.0" mnemonicParsing="false" prefHeight="25.0" text="Копировать" />
     </HBox>
-    <Label text="Алгоритм шифрования:">
-      <padding>
-        <Insets bottom="-10" />
-      </padding>
-    </Label>
-    <ChoiceBox fx:id="algorithmNameChoice" prefHeight="25.0" maxWidth="500.0" value="Выберите...">
-      <items>
-        <FXCollections fx:factory="observableArrayList">
-          <String fx:value="AES-128 ECB" />
-          <String fx:value="XOR" />
-        </FXCollections>
-      </items>
-    </ChoiceBox>
     <Label layoutX="20.0" layoutY="124.0" text="Результат (текст):">
       <padding>
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <HBox spacing="10">
-      <TextField fx:id="resultTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
-      <Button fx:id="copyResultButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+    <HBox minWidth="455.0" spacing="10">
+      <VBox minWidth="422.0">
+        <TextField fx:id="resultTextField" disable="true" prefHeight="25.0" />
+      </VBox>
+      <Button fx:id="copyResultButton" minWidth="82.0" mnemonicParsing="false" prefHeight="25.0" text="Копировать" />
     </HBox>
     <Label layoutX="20.0" layoutY="176.0" text="Результат (HEX):">
       <padding>
         <Insets bottom="-10" />
       </padding>
     </Label>
-    <HBox layoutX="20.0" layoutY="193.0" spacing="10">
-      <TextField fx:id="resultHexTextField" disable="true" minWidth="198.0" prefHeight="25.0" prefWidth="364.0" />
-      <Button fx:id="copyResultHexButton" mnemonicParsing="false" prefHeight="25.0" minWidth="82.0" text="Копировать" />
+    <HBox spacing="10">
+      <VBox minWidth="422.0">
+        <TextField fx:id="resultHexTextField" disable="true" prefHeight="25.0" />
+      </VBox>
+      <Button fx:id="copyResultHexButton" minWidth="82.0" mnemonicParsing="false" prefHeight="25.0" text="Копировать" />
     </HBox>
     <HBox>
       <Pane HBox.hgrow="ALWAYS" />

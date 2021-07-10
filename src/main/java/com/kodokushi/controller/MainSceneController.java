@@ -1,7 +1,7 @@
 package com.kodokushi.controller;
 
-import com.kodokushi.crypto.Crypto;
 import com.kodokushi.converter.Converter;
+import com.kodokushi.crypto.KeyGenerator;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -27,13 +27,15 @@ public class MainSceneController {
     @FXML
     private ToggleGroup selectedMode;
     @FXML
+    private ChoiceBox<String> algorithmChooser;
+    @FXML
     private TextField keyTextField;
+    @FXML
+    private ChoiceBox<String> keySizeChooser;
     @FXML
     private Button setKeyButton;
     @FXML
     private Button copyKeyButton;
-    @FXML
-    private ChoiceBox<String> algorithmNameChoice;
     @FXML
     private TextField resultTextField;
     @FXML
@@ -52,9 +54,13 @@ public class MainSceneController {
     }
 
     private void mCopyToClipboard(String string) {
-        StringSelection stringSelection = new StringSelection(string);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
+        if (string.length() != 0) {
+            StringSelection stringSelection = new StringSelection(string);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        } else {
+            throw new IllegalStateException("Zero string length");
+        }
     }
 
     private boolean mValidateMessageTextField() {
@@ -77,8 +83,18 @@ public class MainSceneController {
         }
     }
 
+    private boolean mValidateAlgorithmChooser() {
+        if (!algorithmChooser.getValue().equals("AES ECB") && !algorithmChooser.getValue().equals("GOST")) {
+            algorithmChooser.getStyleClass().add("error-border");
+            return false;
+        } else {
+            algorithmChooser.getStyleClass().remove("error-border");
+            return true;
+        }
+    }
+
     private boolean mValidateKeyTextField() {
-        if (!keyTextField.getText().matches("(?=.*[\\d])(?=.*[\\s])(?=.*[a-fA-F])[a-fA-F\\s\\d]{1,48}")) {
+        if (!keyTextField.getText().matches("(?=.*[\\d])(?=.*[\\s])(?=.*[a-fA-F])[a-fA-F\\s\\d]+")) {
             keyTextField.getStyleClass().add("error-border");
             return false;
         } else {
@@ -87,21 +103,19 @@ public class MainSceneController {
         }
     }
 
-    private boolean mValidateAlgorithmNameField() {
-        if (!algorithmNameChoice.getValue().equals("AES") && !algorithmNameChoice.getValue().equals("XOR")) {
-            algorithmNameChoice.getStyleClass().add("error-border");
-            return false;
+    private void mEncryptDecryptAuxiliary(String mode) {
+        if (mValidateMessageTextField() && mValidateKeyTextField() && mValidateAlgorithmChooser()) {
+
+            resultTextField.setText("message");
+            resultHexTextField.setText("message");
         } else {
-            algorithmNameChoice.getStyleClass().remove("error-border");
-            return true;
+            ErrorSceneController.mDisplayErrorWindow();
         }
     }
 
-    private void mEncryptDecryptAuxiliary(String mode) {
-        if (mValidateMessageTextField() && mValidateKeyTextField() && mValidateAlgorithmNameField()) {
+    private void mEncryptDecryptAuxiliary() {
+        if (mValidateMessageTextField() && mValidateAlgorithmChooser() && mValidateKeyTextField()) {
 
-            // resultTextField.setText(Converter.mCharArrayToString());
-            // resultHexTextField.setText(Converter.mCharArrayToHexString());
         } else {
             ErrorSceneController.mDisplayErrorWindow();
         }
@@ -125,28 +139,64 @@ public class MainSceneController {
             }
         });
 
+        algorithmChooser.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+            if (!newValue) {
+                if (mValidateAlgorithmChooser()) {
+                    switch(algorithmChooser.getValue()) {
+                        case "AES ECB" -> {
+                            keySizeChooser.setValue("128");
+                            keySizeChooser.setDisable(false);
+                        }
+                        case "GOST" -> {
+                            keySizeChooser.setValue("256");
+                            keySizeChooser.setDisable(true);
+                        }
+                    }
+                } else {
+                    keySizeChooser.setDisable(true);
+                }
+            }
+        });
+
+        algorithmChooser.setOnHiding((event) -> mainScene.requestFocus());
+
         keyTextField.focusedProperty().addListener((arg0, oldValue, newValue) -> {
             if (!newValue) {
                 mValidateKeyTextField();
             }
         });
 
-        algorithmNameChoice.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-            if (!newValue) {
-                mValidateAlgorithmNameField();
-            }
+        keySizeChooser.setOnHiding((event) -> mainScene.requestFocus());
+
+        setKeyButton.setOnAction(event -> {
+            keyTextField.setText(Converter.mCharArrayToHexString(KeyGenerator.mCreateKey(Integer.parseInt(
+                    keySizeChooser.getValue()))));
+            mainScene.requestFocus();
         });
 
-        setKeyButton.setOnAction(event -> keyTextField.setText("")); // TODO: add converted to hex byte array
+        copyKeyButton.setOnAction(event -> {
+            mCopyToClipboard(keyTextField.getText());
+            mainScene.requestFocus();
+        });
 
-        copyKeyButton.setOnAction(event -> mCopyToClipboard(keyTextField.getText()));
+        copyResultButton.setOnAction(event -> {
+            mCopyToClipboard(resultTextField.getText());
+            mainScene.requestFocus();
+        });
 
-        copyResultButton.setOnAction(event -> mCopyToClipboard(resultTextField.getText()));
+        copyResultHexButton.setOnAction(event -> {
+            mCopyToClipboard(resultHexTextField.getText());
+            mainScene.requestFocus();
+        });
 
-        copyResultHexButton.setOnAction(event -> mCopyToClipboard(resultHexTextField.getText()));
+        encryptButton.setOnAction(event -> {
+            // TODO: add algo selection
+            mainScene.requestFocus();
+        });
 
-        encryptButton.setOnAction(event -> {});
-
-        decryptButton.setOnAction(event -> {});
+        decryptButton.setOnAction(event -> {
+            // TODO: add algo selection
+            mainScene.requestFocus();
+        });
     }
 }
