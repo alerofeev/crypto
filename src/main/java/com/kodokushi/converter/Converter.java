@@ -12,6 +12,14 @@ public interface Converter {
         return charArray;
     }
 
+    static String mCharArrayToString(char[] charArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char c : charArray) {
+            stringBuilder.append(c);
+        }
+        return stringBuilder.toString();
+    }
+
     static String mCharArrayToHexString(char[] charArray) {
         StringBuilder hexString = new StringBuilder();
         for (int c : charArray) {

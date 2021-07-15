@@ -3,6 +3,7 @@ package com.kodokushi.controller;
 import com.kodokushi.converter.Converter;
 import com.kodokushi.crypto.KeyGenerator;
 
+import com.kodokushi.crypto.algorithm.Aes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -84,7 +85,7 @@ public class MainSceneController {
     }
 
     private boolean mValidateAlgorithmChooser() {
-        if (!algorithmChooser.getValue().equals("AES ECB") && !algorithmChooser.getValue().equals("GOST")) {
+        if (!algorithmChooser.getValue().equals("AES ECB") && !algorithmChooser.getValue().equals("GOST ECB")) {
             algorithmChooser.getStyleClass().add("error-border");
             return false;
         } else {
@@ -104,18 +105,29 @@ public class MainSceneController {
     }
 
     private void mEncryptDecryptAuxiliary(String mode) {
-        if (mValidateMessageTextField() && mValidateKeyTextField() && mValidateAlgorithmChooser()) {
-
-            resultTextField.setText("message");
-            resultHexTextField.setText("message");
-        } else {
-            ErrorSceneController.mDisplayErrorWindow();
-        }
-    }
-
-    private void mEncryptDecryptAuxiliary() {
         if (mValidateMessageTextField() && mValidateAlgorithmChooser() && mValidateKeyTextField()) {
-
+            char[] initialMessage, resultMessage;
+            if (mGetToggleGroupValue().equals("HEX")) {
+                initialMessage = Converter.mHexStringToCharArray(messageTextField.getText());
+            } else {
+                initialMessage = Converter.mStringToCharArray(messageTextField.getText());
+            }
+            switch (algorithmChooser.getValue()) {
+                case "AES ECB" -> {
+                    Aes aes = new Aes(initialMessage, Integer.parseInt(keySizeChooser.getValue()),
+                            Converter.mHexStringToCharArray(keyTextField.getText()));
+                    if (mode.equals("enc")) {
+                        aes.mEncrypt();
+                    } else {
+                        aes.mDecrypt();
+                    }
+                    resultMessage = aes.mGetMessage();
+                }
+                case "GOST ECB" -> resultMessage = new char[0]; // TODO: add GOST algo
+                default -> throw new IllegalStateException("Unexpected algorithm name.");
+            }
+            resultTextField.setText(Converter.mCharArrayToString(resultMessage));
+            resultHexTextField.setText(Converter.mCharArrayToHexString(resultMessage));
         } else {
             ErrorSceneController.mDisplayErrorWindow();
         }
@@ -147,7 +159,7 @@ public class MainSceneController {
                             keySizeChooser.setValue("128");
                             keySizeChooser.setDisable(false);
                         }
-                        case "GOST" -> {
+                        case "GOST ECB" -> {
                             keySizeChooser.setValue("256");
                             keySizeChooser.setDisable(true);
                         }
@@ -190,12 +202,12 @@ public class MainSceneController {
         });
 
         encryptButton.setOnAction(event -> {
-            // TODO: add algo selection
+            mEncryptDecryptAuxiliary("enc");
             mainScene.requestFocus();
         });
 
         decryptButton.setOnAction(event -> {
-            // TODO: add algo selection
+            mEncryptDecryptAuxiliary("dec");
             mainScene.requestFocus();
         });
     }
